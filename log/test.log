@@ -28054,3 +28054,1222 @@ Processing by Admin::CharitiesController#new as HTML
   Rendered admin/charities/new.html.erb within layouts/application (1.0ms)
 Completed 200 OK in 5ms (Views: 3.0ms | ActiveRecord: 0.0ms)
   [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[36mActiveRecord::SchemaMigration Load (14.0ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (20.0ms)[0m  ALTER TABLE "schema_migrations" DISABLE TRIGGER ALL;ALTER TABLE "users" DISABLE TRIGGER ALL;ALTER TABLE "charities" DISABLE TRIGGER ALL
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+  [1m[35mFixture Delete (13.0ms)[0m  DELETE FROM "charities"
+  [1m[36mFixture Insert (10.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Ban Khru Noi', 0, 'THB', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 563589564)[0m
+  [1m[35mFixture Insert (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Habitat for Humanity Thailand', 0, 'THB', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 459292723)
+  [1m[36mFixture Insert (1.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Paper Ranger', 0, 'THB', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 103210531)[0m
+  [1m[35mFixture Insert (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Makhampom Theater', 0, 'THB', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 917085421)
+  [1m[36mFixture Insert (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Thailand Association of the Blind', 0, 'THB', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 83783397)[0m
+  [1m[35mFixture Delete (13.0ms)[0m  DELETE FROM "users"
+  [1m[36mFixture Insert (7.0ms)[0m  [1mINSERT INTO "users" ("email", "encrypted_password", "created_at", "updated_at", "id") VALUES ('john@omise.co', '$2a$04$.BwccqVYjNO97n1/EMavJebzz8lw5jcrzSTUWoCDiPLEsuFsRqS5.', '2016-01-06 10:48:06', '2016-01-06 10:48:06', 830138774)[0m
+  [1m[35m (2.0ms)[0m  COMMIT
+  [1m[36m (0.0ms)[0m  [1mALTER TABLE "schema_migrations" ENABLE TRIGGER ALL;ALTER TABLE "users" ENABLE TRIGGER ALL;ALTER TABLE "charities" ENABLE TRIGGER ALL[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------
+WebsiteTest: test_that_someone_can_donate_to_a_charity
+------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3  [["total", 10000], ["updated_at", "2016-01-06 10:48:06.659110"], ["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 98ms (ActiveRecord: 0.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (2.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (20.0ms)
+Completed 500 Internal Server Error in 72ms (ActiveRecord: 2.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_without_a_token
+-----------------------------------------------------------
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "charity"=>"563589564"}
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (7.0ms)
+Completed 500 Internal Server Error in 12ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_we_can_donate_to_a_charity_at_random
+-----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"[0m
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"random"}
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 83783397]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:48:06.831181"], ["id", 83783397]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 5ms (ActiveRecord: 1.0ms)
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 459292723]]
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 103210531]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 917085421]]
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 83783397]]
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------------
+WebsiteTest: test_that_if_the_charge_fail_from_omise_side_it_shows_an_error
+---------------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"999", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_0_to_a_charity
+----------------------------------------------------------
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"0", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (6.0ms)
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 1.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_to_no_charity
+---------------------------------------------------------
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"tokn_X", "charity"=>""}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (6.0ms)
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_less_than_20_to_a_charity
+---------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"19", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (6.0ms)
+Completed 500 Internal Server Error in 7ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+----------------------------------
+WebsiteTest: test_should_get_index
+----------------------------------
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 1.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_without_a_name
+------------------------------------------------------------------------------------------------
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:06 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (8.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (112.0ms)
+Completed 200 OK in 577ms (Views: 568.4ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (15.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:48:07.540630"], ["current_sign_in_at", "2016-01-06 10:48:07.540630"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:48:07.541631"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 41ms (ActiveRecord: 15.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 1.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_list_of_charities
+-------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (7.0ms)
+Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (1.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (1.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:48:07.604658"], ["current_sign_in_at", "2016-01-06 10:48:07.604658"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:48:07.605657"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 8ms (ActiveRecord: 2.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 4ms (ActiveRecord: 1.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+----------------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_and_set_the_total_amount
+----------------------------------------------------------------------------------------------------------
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (6.0ms)
+Completed 200 OK in 8ms (Views: 7.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:48:07.643672"], ["current_sign_in_at", "2016-01-06 10:48:07.643672"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:48:07.644672"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 8ms (ActiveRecord: 0.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_unauthenticated_user_cannot_reach_the_list_of_charities
+------------------------------------------------------------------------------------------
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Admin::CharitiesController#index as HTML
+Completed 401 Unauthorized in 0ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_new_charity_form
+------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:48:07.753718"], ["current_sign_in_at", "2016-01-06 10:48:07.753718"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:48:07.754719"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 1.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_create_a_new_charity
+------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (2.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (6.0ms)
+Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:48:07.788734"], ["current_sign_in_at", "2016-01-06 10:48:07.788734"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:48:07.789735"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:48:07 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 1.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------------------
+CharityTest: test_that_we_can_credit_a_charity_some_money
+---------------------------------------------------------
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:48:07.805740"], ["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+----------------------------------------------------------------------------------------------------------
+CharityTest: test_that_a_charity_total_balance_is_correct_even_if_credited_from_two_different_ruby_objects
+----------------------------------------------------------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:48:07.810743"], ["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 20000], ["updated_at", "2016-01-06 10:48:07.812742"], ["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+-----------------------------------------
+AppTest: test_that_we_can_build_a_charity
+-----------------------------------------
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------
+AppTest: test_that_we_just_built_charity_has_a_total_of_0
+---------------------------------------------------------
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+--------------------------------------------
+AppTest: test_that_we_can_list_all_charities
+--------------------------------------------
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+------------------------------------------
+AppTest: test_that_we_can_create_a_charity
+------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.820746"], ["updated_at", "2016-01-06 10:48:07.820746"]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+-----------------------------------------------
+AppTest: test_that_wen_can_find_a_charity_by_id
+-----------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+---------------------------------------------
+AppTest: test_that_we_can_count_all_charities
+---------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"[0m
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 563589564]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 459292723]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 103210531]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 917085421]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 83783397]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 0"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.831751"], ["updated_at", "2016-01-06 10:48:07.831751"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.833751"], ["updated_at", "2016-01-06 10:48:07.833751"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.835753"], ["updated_at", "2016-01-06 10:48:07.835753"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SELECT COUNT(*) FROM "charities"
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+---------------------------------------------------------------
+AppTest: test_that_a_newly_created_charity_has_a_total_of_0_THB
+---------------------------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.838753"], ["updated_at", "2016-01-06 10:48:07.838753"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------------------------------------------
+AppTest: test_that_even_if_we_try_to_create_a_charity_with_more_than_0_THB_in_the_total_we_will_get_0_THB
+---------------------------------------------------------------------------------------------------------
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.841755"], ["updated_at", "2016-01-06 10:48:07.841755"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-------------------------------------------------------------
+AppTest: test_that_all_charities_are_listed_by_creation_order
+-------------------------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.843756"], ["updated_at", "2016-01-06 10:48:07.843756"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.845756"], ["updated_at", "2016-01-06 10:48:07.845756"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 3"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:48:07.849758"], ["updated_at", "2016-01-06 10:48:07.849758"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+------------------------------------------------------------
+AppTest: test_that_we_cannot_create_a_charity_without_a_name
+------------------------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (1.0ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (13.0ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (4.0ms)[0m  ALTER TABLE "schema_migrations" DISABLE TRIGGER ALL;ALTER TABLE "users" DISABLE TRIGGER ALL;ALTER TABLE "charities" DISABLE TRIGGER ALL
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+  [1m[35mFixture Delete (14.0ms)[0m  DELETE FROM "charities"
+  [1m[36mFixture Insert (11.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Ban Khru Noi', 0, 'THB', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 563589564)[0m
+  [1m[35mFixture Insert (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Habitat for Humanity Thailand', 0, 'THB', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 459292723)
+  [1m[36mFixture Insert (1.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Paper Ranger', 0, 'THB', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 103210531)[0m
+  [1m[35mFixture Insert (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Makhampom Theater', 0, 'THB', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 917085421)
+  [1m[36mFixture Insert (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Thailand Association of the Blind', 0, 'THB', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 83783397)[0m
+  [1m[35mFixture Delete (14.1ms)[0m  DELETE FROM "users"
+  [1m[36mFixture Insert (8.0ms)[0m  [1mINSERT INTO "users" ("email", "encrypted_password", "created_at", "updated_at", "id") VALUES ('john@omise.co', '$2a$04$asM5DelVFpfj4WhJqVZbE.7feAtvhCbXJk8OMfC4AJnm/N1e0OKnO', '2016-01-06 10:51:20', '2016-01-06 10:51:20', 830138774)[0m
+  [1m[35m (6.0ms)[0m  COMMIT
+  [1m[36m (0.0ms)[0m  [1mALTER TABLE "schema_migrations" ENABLE TRIGGER ALL;ALTER TABLE "users" ENABLE TRIGGER ALL;ALTER TABLE "charities" ENABLE TRIGGER ALL[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_to_no_charity
+---------------------------------------------------------
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:20 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"tokn_X", "charity"=>""}
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 500 Internal Server Error in 122ms (ActiveRecord: 0.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_0_to_a_charity
+----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:20 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"0", "omise_token"=>"token_X", "charity"=>"563589564"}
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------------
+WebsiteTest: test_that_if_the_charge_fail_from_omise_side_it_shows_an_error
+---------------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"999", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 9ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_less_than_20_to_a_charity
+---------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"19", "omise_token"=>"token_X", "charity"=>"563589564"}
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_without_a_token
+-----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "charity"=>"563589564"}
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+----------------------------------
+WebsiteTest: test_should_get_index
+----------------------------------
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+------------------------------------------------------
+WebsiteTest: test_that_someone_can_donate_to_a_charity
+------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:51:21.077316"], ["id", 563589564]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 2.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_we_can_donate_to_a_charity_at_random
+-----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"[0m
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"random"}
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 459292723]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:51:21.110333"], ["id", 459292723]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 5ms (ActiveRecord: 3.0ms)
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 459292723]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 103210531]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 917085421]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 83783397]]
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+-------------------------------------------------------------
+AppTest: test_that_all_charities_are_listed_by_creation_order
+-------------------------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.128336"], ["updated_at", "2016-01-06 10:51:21.128336"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.131338"], ["updated_at", "2016-01-06 10:51:21.131338"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 3"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.132338"], ["updated_at", "2016-01-06 10:51:21.132338"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mCharity Load (2.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+--------------------------------------------
+AppTest: test_that_we_can_list_all_charities
+--------------------------------------------
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------------------------
+AppTest: test_that_a_newly_created_charity_has_a_total_of_0_THB
+---------------------------------------------------------------
+  [1m[36m (1.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.140342"], ["updated_at", "2016-01-06 10:51:21.140342"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------
+AppTest: test_that_we_can_count_all_charities
+---------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 459292723]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 103210531]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 917085421]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 83783397]]
+  [1m[36m (1.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 0"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.148345"], ["updated_at", "2016-01-06 10:51:21.148345"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.150345"], ["updated_at", "2016-01-06 10:51:21.150345"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.152347"], ["updated_at", "2016-01-06 10:51:21.152347"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSELECT COUNT(*) FROM "charities"[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+------------------------------------------
+AppTest: test_that_we_can_create_a_charity
+------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.155347"], ["updated_at", "2016-01-06 10:51:21.155347"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------
+AppTest: test_that_we_cannot_create_a_charity_without_a_name
+------------------------------------------------------------
+  [1m[36m (1.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK TO SAVEPOINT active_record_1
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------------------------------------------------------------------
+AppTest: test_that_even_if_we_try_to_create_a_charity_with_more_than_0_THB_in_the_total_we_will_get_0_THB
+---------------------------------------------------------------------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:51:21.161351"], ["updated_at", "2016-01-06 10:51:21.161351"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+-----------------------------------------
+AppTest: test_that_we_can_build_a_charity
+-----------------------------------------
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------
+AppTest: test_that_we_just_built_charity_has_a_total_of_0
+---------------------------------------------------------
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+-----------------------------------------------
+AppTest: test_that_wen_can_find_a_charity_by_id
+-----------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------
+CharityTest: test_that_we_can_credit_a_charity_some_money
+---------------------------------------------------------
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3  [["total", 10000], ["updated_at", "2016-01-06 10:51:21.171353"], ["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+----------------------------------------------------------------------------------------------------------
+CharityTest: test_that_a_charity_total_balance_is_correct_even_if_credited_from_two_different_ruby_objects
+----------------------------------------------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (1.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3  [["total", 10000], ["updated_at", "2016-01-06 10:51:21.176356"], ["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3  [["total", 20000], ["updated_at", "2016-01-06 10:51:21.178357"], ["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_unauthenticated_user_cannot_reach_the_list_of_charities
+------------------------------------------------------------------------------------------
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by Admin::CharitiesController#index as HTML
+Completed 401 Unauthorized in 13ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+----------------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_and_set_the_total_amount
+----------------------------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (8.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (114.0ms)
+Completed 200 OK in 692ms (Views: 685.5ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (1.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (3.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:51:21.946904"], ["current_sign_in_at", "2016-01-06 10:51:21.946904"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:51:21.947905"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 30ms (ActiveRecord: 4.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_create_a_new_charity
+------------------------------------------------------------------------------
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (4.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:21 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["email", "john@omise.co"]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7[0m  [["last_sign_in_at", "2016-01-06 10:51:22.001928"], ["current_sign_in_at", "2016-01-06 10:51:22.001928"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:51:22.002929"], ["id", 830138774]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 8ms (ActiveRecord: 2.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_without_a_name
+------------------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (7.0ms)
+Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (1.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (1.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:51:22.034941"], ["current_sign_in_at", "2016-01-06 10:51:22.034941"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:51:22.035941"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 12ms (ActiveRecord: 2.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+-------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_list_of_charities
+-------------------------------------------------------------------------------------
+  [1m[35mUser Load (1.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["email", "john@omise.co"]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mUPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7[0m  [["last_sign_in_at", "2016-01-06 10:51:22.071957"], ["current_sign_in_at", "2016-01-06 10:51:22.071957"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:51:22.072958"], ["id", 830138774]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 8ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_new_charity_form
+------------------------------------------------------------------------------------
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (4.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 11ms (Views: 9.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:51:22.106972"], ["current_sign_in_at", "2016-01-06 10:51:22.106972"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:51:22.107972"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 0.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:51:22 +0700
+Processing by WebsiteController#index as HTML
+  Rendered website/index.html.erb within layouts/website (1.0ms)
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36mActiveRecord::SchemaMigration Load (12.0ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35m (4.0ms)[0m  ALTER TABLE "schema_migrations" DISABLE TRIGGER ALL;ALTER TABLE "users" DISABLE TRIGGER ALL;ALTER TABLE "charities" DISABLE TRIGGER ALL
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+  [1m[35mFixture Delete (12.0ms)[0m  DELETE FROM "charities"
+  [1m[36mFixture Insert (9.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Ban Khru Noi', 0, 'THB', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 563589564)[0m
+  [1m[35mFixture Insert (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Habitat for Humanity Thailand', 0, 'THB', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 459292723)
+  [1m[36mFixture Insert (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Paper Ranger', 0, 'THB', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 103210531)[0m
+  [1m[35mFixture Insert (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Makhampom Theater', 0, 'THB', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 917085421)
+  [1m[36mFixture Insert (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at", "id") VALUES ('Thailand Association of the Blind', 0, 'THB', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 83783397)[0m
+  [1m[35mFixture Delete (13.0ms)[0m  DELETE FROM "users"
+  [1m[36mFixture Insert (9.0ms)[0m  [1mINSERT INTO "users" ("email", "encrypted_password", "created_at", "updated_at", "id") VALUES ('john@omise.co', '$2a$04$i4DebXGiIv46cCmic4915OMFBEEgBzBOFKx23pCvQjrzUrMTxQSbe', '2016-01-06 10:52:51', '2016-01-06 10:52:51', 830138774)[0m
+  [1m[35m (7.0ms)[0m  COMMIT
+  [1m[36m (0.0ms)[0m  [1mALTER TABLE "schema_migrations" ENABLE TRIGGER ALL;ALTER TABLE "users" ENABLE TRIGGER ALL;ALTER TABLE "charities" ENABLE TRIGGER ALL[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_without_a_name
+------------------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:51 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (8.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (161.1ms)
+Completed 200 OK in 771ms (Views: 741.6ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (1.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (2.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:52:52.030553"], ["current_sign_in_at", "2016-01-06 10:52:52.030553"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:52:52.031555"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 27ms (ActiveRecord: 3.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (2.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (10.0ms)
+Completed 200 OK in 40ms (Views: 37.0ms | ActiveRecord: 2.0ms)
+Started GET "/admin/charities/new" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#new as HTML
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  Rendered admin/charities/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 24ms (Views: 21.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (1.0ms)[0m  SELECT COUNT(*) FROM "charities"
+Started POST "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#create as HTML
+  Parameters: {"charity"=>{"name"=>""}}
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  Rendered admin/charities/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 6ms (Views: 2.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  SELECT COUNT(*) FROM "charities"
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_list_of_charities
+-------------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (7.0ms)
+Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:52:52.186616"], ["current_sign_in_at", "2016-01-06 10:52:52.186616"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:52:52.187617"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 1.0ms)
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#index as HTML
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered admin/charities/index.html.erb within layouts/application (3.0ms)
+Completed 200 OK in 15ms (Views: 9.0ms | ActiveRecord: 1.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_reach_the_new_charity_form
+------------------------------------------------------------------------------------
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (8.0ms)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:52:52.235634"], ["current_sign_in_at", "2016-01-06 10:52:52.235634"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:52:52.236635"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 8ms (ActiveRecord: 0.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 1.0ms)
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#index as HTML
+  [1m[36mUser Load (1.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered admin/charities/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 6ms (Views: 4.0ms | ActiveRecord: 1.0ms)
+Started GET "/admin/charities/new" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#new as HTML
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  Rendered admin/charities/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+----------------------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_cannot_create_a_new_charity_and_set_the_total_amount
+----------------------------------------------------------------------------------------------------------
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (2.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (6.0ms)
+Completed 200 OK in 8ms (Views: 8.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["email", "john@omise.co"]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mUPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7[0m  [["last_sign_in_at", "2016-01-06 10:52:52.335673"], ["current_sign_in_at", "2016-01-06 10:52:52.335673"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:52:52.336675"], ["id", 830138774]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 1.0ms)
+Started GET "/admin/charities/new" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#new as HTML
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["id", 830138774]]
+  Rendered admin/charities/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 4ms (Views: 3.0ms | ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mSELECT COUNT(*) FROM "charities"[0m
+Started POST "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#create as HTML
+  Parameters: {"charity"=>{"name"=>"Elephant Nature Park", "total"=>"1000"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["id", 830138774]]
+Unpermitted parameter: total
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.355681"], ["updated_at", "2016-01-06 10:52:52.355681"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/admin/charities
+Completed 302 Found in 5ms (ActiveRecord: 1.0ms)
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#index as HTML
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["id", 830138774]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered admin/charities/index.html.erb within layouts/application (3.0ms)
+Completed 200 OK in 5ms (Views: 4.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  SELECT COUNT(*) FROM "charities"
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities"  ORDER BY "charities"."created_at" DESC LIMIT 1[0m
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities"  ORDER BY "charities"."created_at" DESC LIMIT 1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_authenticated_user_can_create_a_new_charity
+------------------------------------------------------------------------------
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1 LIMIT 1[0m  [["id", 830138774]]
+Started GET "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#new as HTML
+  Rendered devise/shared/_links.html.erb (3.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (6.0ms)
+Completed 200 OK in 8ms (Views: 7.0ms | ActiveRecord: 0.0ms)
+Started POST "/users/sign_in" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Devise::SessionsController#create as HTML
+  Parameters: {"user"=>{"email"=>"john@omise.co", "password"=>"[FILTERED]"}}
+  [1m[35mUser Load (0.0ms)[0m  SELECT  "users".* FROM "users" WHERE "users"."email" = $1  ORDER BY "users"."id" ASC LIMIT 1  [["email", "john@omise.co"]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  UPDATE "users" SET "last_sign_in_at" = $1, "current_sign_in_at" = $2, "last_sign_in_ip" = $3, "current_sign_in_ip" = $4, "sign_in_count" = $5, "updated_at" = $6 WHERE "users"."id" = $7  [["last_sign_in_at", "2016-01-06 10:52:52.386692"], ["current_sign_in_at", "2016-01-06 10:52:52.386692"], ["last_sign_in_ip", "127.0.0.1/32"], ["current_sign_in_ip", "127.0.0.1/32"], ["sign_in_count", 1], ["updated_at", "2016-01-06 10:52:52.386692"], ["id", 830138774]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+Redirected to http://www.example.com/
+Completed 302 Found in 7ms (ActiveRecord: 1.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 1.0ms)
+Started GET "/admin/charities/new" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#new as HTML
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  Rendered admin/charities/new.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 4ms (Views: 2.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (1.0ms)[0m  SELECT COUNT(*) FROM "charities"
+Started POST "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#create as HTML
+  Parameters: {"charity"=>{"name"=>"Elephant Nature Park", "description"=>"A charity that helps elephants go back to the wild."}}
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "description", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["description", "A charity that helps elephants go back to the wild."], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.406702"], ["updated_at", "2016-01-06 10:52:52.406702"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/admin/charities
+Completed 302 Found in 4ms (ActiveRecord: 1.0ms)
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#index as HTML
+  [1m[36mUser Load (0.0ms)[0m  [1mSELECT  "users".* FROM "users" WHERE "users"."id" = $1  ORDER BY "users"."id" ASC LIMIT 1[0m  [["id", 830138774]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered admin/charities/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 5ms (Views: 4.0ms | ActiveRecord: 0.0ms)
+  [1m[36m (0.0ms)[0m  [1mSELECT COUNT(*) FROM "charities"[0m
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities"  ORDER BY "charities"."created_at" DESC LIMIT 1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------------------------------------------------------
+Admin::CharitiesTest: test_that_an_unauthenticated_user_cannot_reach_the_list_of_charities
+------------------------------------------------------------------------------------------
+Started GET "/admin/charities" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by Admin::CharitiesController#index as HTML
+Completed 401 Unauthorized in 0ms (ActiveRecord: 0.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+----------------------------------------------------------------------------------------------------------
+CharityTest: test_that_a_charity_total_balance_is_correct_even_if_credited_from_two_different_ruby_objects
+----------------------------------------------------------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:52:52.436713"], ["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 20000], ["updated_at", "2016-01-06 10:52:52.439714"], ["id", 563589564]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------
+CharityTest: test_that_we_can_credit_a_charity_some_money
+---------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  UPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3  [["total", 10000], ["updated_at", "2016-01-06 10:52:52.442715"], ["id", 563589564]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_to_no_charity
+---------------------------------------------------------
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"tokn_X", "charity"=>""}
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (4.0ms)
+Filter chain halted as :charity rendered or redirected
+Completed 200 OK in 10ms (Views: 8.0ms | ActiveRecord: 1.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+----------------------------------
+WebsiteTest: test_should_get_index
+----------------------------------
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 200 OK in 4ms (Views: 4.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_less_than_20_to_a_charity
+---------------------------------------------------------------------
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"19", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Filter chain halted as :amount rendered or redirected
+Completed 200 OK in 5ms (Views: 4.0ms | ActiveRecord: 0.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_0_to_a_charity
+----------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"0", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Filter chain halted as :amount rendered or redirected
+Completed 200 OK in 5ms (Views: 3.0ms | ActiveRecord: 1.0ms)
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (1.0ms)[0m  [1mBEGIN[0m
+------------------------------------------------------
+WebsiteTest: test_that_someone_can_donate_to_a_charity
+------------------------------------------------------
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:52:52.501738"], ["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 4ms (ActiveRecord: 2.0ms)
+Started GET "/" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#index as HTML
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 200 OK in 4ms (Views: 3.0ms | ActiveRecord: 1.0ms)
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_we_can_donate_to_a_charity_at_random
+-----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"[0m
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "omise_token"=>"token_X", "charity"=>"random"}
+  [1m[35mCharity Load (0.0ms)[0m  SELECT "charities".* FROM "charities"
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 917085421]]
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mUPDATE "charities" SET "total" = $1, "updated_at" = $2 WHERE "charities"."id" = $3[0m  [["total", 10000], ["updated_at", "2016-01-06 10:52:52.521746"], ["id", 917085421]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+Redirected to http://www.example.com/
+Completed 302 Found in 5ms (ActiveRecord: 2.0ms)
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 459292723]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 103210531]]
+  [1m[35mCharity Load (1.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 917085421]]
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 83783397]]
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------------
+WebsiteTest: test_that_if_the_charge_fail_from_omise_side_it_shows_an_error
+---------------------------------------------------------------------------
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"999", "omise_token"=>"token_X", "charity"=>"563589564"}
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (3.0ms)
+Completed 200 OK in 5ms (Views: 3.0ms | ActiveRecord: 2.0ms)
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+-----------------------------------------------------------
+WebsiteTest: test_that_someone_can't_donate_without_a_token
+-----------------------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+Started POST "/donate" for 127.0.0.1 at 2016-01-06 17:52:52 +0700
+Processing by WebsiteController#donate as HTML
+  Parameters: {"amount"=>"100", "charity"=>"563589564"}
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  Rendered website/index.html.erb within layouts/website (2.0ms)
+Filter chain halted as :has_token rendered or redirected
+Completed 200 OK in 4ms (Views: 3.0ms | ActiveRecord: 1.0ms)
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+------------------------------------------
+AppTest: test_that_we_can_create_a_charity
+------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.553759"], ["updated_at", "2016-01-06 10:52:52.553759"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+------------------------------------------------------------
+AppTest: test_that_we_cannot_create_a_charity_without_a_name
+------------------------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------------------------------------------------
+AppTest: test_that_even_if_we_try_to_create_a_charity_with_more_than_0_THB_in_the_total_we_will_get_0_THB
+---------------------------------------------------------------------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.559761"], ["updated_at", "2016-01-06 10:52:52.559761"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------
+AppTest: test_that_we_can_build_a_charity
+-----------------------------------------
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+---------------------------------------------
+AppTest: test_that_we_can_count_all_charities
+---------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT "charities".* FROM "charities"[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 563589564]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 459292723]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (1.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 103210531]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  DELETE FROM "charities" WHERE "charities"."id" = $1  [["id", 917085421]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mDELETE FROM "charities" WHERE "charities"."id" = $1[0m  [["id", 83783397]]
+  [1m[35m (1.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 0"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.569764"], ["updated_at", "2016-01-06 10:52:52.569764"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (1.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.571766"], ["updated_at", "2016-01-06 10:52:52.571766"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.572766"], ["updated_at", "2016-01-06 10:52:52.572766"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SELECT COUNT(*) FROM "charities"
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+--------------------------------------------
+AppTest: test_that_we_can_list_all_charities
+--------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-------------------------------------------------------------
+AppTest: test_that_all_charities_are_listed_by_creation_order
+-------------------------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 1"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.577768"], ["updated_at", "2016-01-06 10:52:52.577768"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Anonymous Charity 2"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.579769"], ["updated_at", "2016-01-06 10:52:52.579769"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["name", "Anonymous Charity 3"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.580769"], ["updated_at", "2016-01-06 10:52:52.580769"]]
+  [1m[36m (0.0ms)[0m  [1mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35mCharity Load (1.0ms)[0m  SELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC
+  [1m[36mCharity Load (1.0ms)[0m  [1mSELECT "charities".* FROM "charities"  ORDER BY "charities"."created_at" ASC[0m
+  [1m[35m (0.0ms)[0m  ROLLBACK
+  [1m[36m (0.0ms)[0m  [1mBEGIN[0m
+---------------------------------------------------------------
+AppTest: test_that_a_newly_created_charity_has_a_total_of_0_THB
+---------------------------------------------------------------
+  [1m[35m (0.0ms)[0m  SAVEPOINT active_record_1
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "charities" ("name", "total", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Elephant Nature Park"], ["total", 0], ["currency", "THB"], ["created_at", "2016-01-06 10:52:52.585773"], ["updated_at", "2016-01-06 10:52:52.585773"]]
+  [1m[35m (0.0ms)[0m  RELEASE SAVEPOINT active_record_1
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (1.0ms)[0m  BEGIN
+---------------------------------------------------------
+AppTest: test_that_we_just_built_charity_has_a_total_of_0
+---------------------------------------------------------
+  [1m[36m (0.0ms)[0m  [1mROLLBACK[0m
+  [1m[35m (0.0ms)[0m  BEGIN
+-----------------------------------------------
+AppTest: test_that_wen_can_find_a_charity_by_id
+-----------------------------------------------
+  [1m[36mCharity Load (0.0ms)[0m  [1mSELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1[0m  [["id", 563589564]]
+  [1m[35mCharity Load (0.0ms)[0m  SELECT  "charities".* FROM "charities" WHERE "charities"."id" = $1 LIMIT 1  [["id", 563589564]]
+  [1m[36m (1.0ms)[0m  [1mROLLBACK[0m
