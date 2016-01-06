@@ -1,0 +1,10 @@
+<%= t(".title") %>
+
+<ul>
+  <% @charities.each do |charity| %>
+
+    <li><%= charity.name %> (<%= m charity.total, charity.currency %>)<%= link_to("Edit" , edit_admin_charity_path(charity.id))%></li>
+  <% end %>
+</ul>
+
+<%= link_to t("admin.charities.new.link"), new_admin_charity_path %>
